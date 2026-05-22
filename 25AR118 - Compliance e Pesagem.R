@@ -48,16 +48,17 @@
   setwd("C:/Users/PedroFernandoSantosV")
   weight = read_excel("Downloads/25AR118_raw_CRF.xlsx", skip = 1) %>% 
     drop_na(`RANDOMISATION ID`) %>%
-    select(`RANDOMISATION ID`, STATUS, matches("WEIGHT")) %>% mutate(STATUS = case_when(
+    select(`RANDOMISATION ID`, STATUS, SHADE_PRODUCTSECTION_D0POSTLASER, matches("WEIGHT")) %>% mutate(STATUS = case_when(
       STATUS %in% c("IN_PROGRESS", "QUERIES", "VERIFICATIONS") ~ "COMPLETED",
       str_starts(STATUS, "EXCLUDED") ~ "EXCLUDED",
       str_starts(STATUS, "COMPLETED") ~ "COMPLETED",
       str_starts(STATUS, "SIGNED") ~ "COMPLETED",
       TRUE ~ STATUS
     )) %>%
-    select(`RANDOMISATION ID`, STATUS, contains("INITIAL_WEIGHT"), contains("FINAL_WEIGHT")) %>%
+    select(`RANDOMISATION ID`, STATUS, SHADE_PRODUCTSECTION_D0POSTLASER, contains("INITIAL_WEIGHT"), contains("FINAL_WEIGHT")) %>%
     mutate("Total Use" = INITIAL_WEIGHT_1_PRODUCTWEIGHT - FINAL_WEIGHT_1_PRODUCTWEIGHT) %>%
     rename(ID = `RANDOMISATION ID`,
+           Shade  = SHADE_PRODUCTSECTION_D0POSTLASER,
            "Initial Weight" = INITIAL_WEIGHT_1_PRODUCTWEIGHT,
            "Final Weight" = FINAL_WEIGHT_1_PRODUCTWEIGHT)
 }
